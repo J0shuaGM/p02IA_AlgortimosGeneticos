@@ -8,9 +8,13 @@
 // Fecha: 12/10/2026
 // Archivo: entornopfsp.h, calse encargada de gestionar el entorno, leera los ficheros de Taillard y proporcina la funcion para calcular el makespan
 
+#ifndef PFSP_H
+#define PFSP_H
+
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 class PFSP {
   public: 
@@ -25,5 +29,9 @@ class PFSP {
     int Makespan(const std::vector<int>& pi) const;
   private: 
     int numero_trabajos_, numero_maquinas_;
+    int semilla_inicial; 
+    int upper_bound_, lower_bound_;
     std::vector<std::vector<int>> tiempo_proceso_; //Matriz de tiempo de procesamientos
 };
+
+#endif

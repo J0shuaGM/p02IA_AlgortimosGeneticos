@@ -8,6 +8,9 @@
 // Fecha: 12/10/2026
 // Archivo: individuo.h, cada inidividuo es una solucion al problema, se almacenan los datos del mismo
 
+#ifndef INDIVIDUO_H
+#define INDIVIDUO_H
+
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -17,10 +20,13 @@ struct Individuo {
   int makespan; //Valor objetivo a minimizar
 
   //Constructor
+  Individuo() : makespan(-1) {}
   Individuo(int n) : permutacion(n), makespan(-1) {}
 
   //Sobrecarga del operador <
-  bool operator<(const Individuo& otro) {
+  bool operator<(const Individuo& otro) const {
     return this->makespan < otro.makespan;
   }
 };
+
+#endif
