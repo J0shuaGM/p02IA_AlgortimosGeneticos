@@ -39,15 +39,21 @@ int main(int argc, char* argv[]) {
   double rpd = 100.0 * (cmax - instancia.getUpperBound()) / instancia.getUpperBound();
   std::cout << "-> Cmax = " << cmax << ", RPD = " << rpd << " %" << std::endl;
 
-  //Prueba de aleatoriedad
-  std::mt19937 rng(1); //Semilla del algoritmo (temporal: luego vendra de argv)
-  std::vector<int> aleatorio = BusquedaAleatoria(instancia, 50000, rng);
-  std::cout << "Aleatorio: "; 
-  for(int trabajo : aleatorio) {
-    std::cout << trabajo + 1 << " "; 
+  //Primera prueba AG iniciar poblacion
+  Parametros param;
+  AlgoritmoGenetico prueba(instancia, param);
+  prueba.inicializarPoblacion();
+  std::vector<Individuo> poblacion = prueba.getPoblacion(); 
+  for(Individuo indi : poblacion) {
+    std::cout << indi.makespan << " ";
   }
-  int rngcmax = instancia.Makespan(aleatorio); 
-  double rngrpd = 100.0 * (rngcmax - instancia.getUpperBound()) / instancia.getUpperBound();
-  std::cout << "-> Cmax = " << rngcmax << ", RPD = " << rngrpd << " %" << std::endl;
+  std::cout << std::endl;
+  std::cout << "Evaluaciones totales: " << prueba.getEvaluaciones() << std::endl;
+  std::cout << "Mejor global: " << prueba.getMejorSolucion().makespan << std::endl;
+  std::vector<std::pair<int, int>> historial = prueba.getHistorial(); 
+  for(auto entrada : historial) {
+    std::cout << entrada.first << "/" << entrada.second << ", ";
+  }
+  std::cout << std::endl;
   return EXIT_SUCCESS;
 }
