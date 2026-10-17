@@ -24,6 +24,9 @@ class PFSP {
     //Getters
     int getTrabajos(void) const { return numero_trabajos_; }
     int getMaquinas(void) const { return numero_maquinas_; }
+    int getTiempo(int trabajo, int maquina) const { return tiempo_proceso_[maquina][trabajo]; }
+    int getUpperBound(void) const { return upper_bound_; }
+    int getSemilla(void) const { return semilla_inicial; }
 
     //Metodos
     int Makespan(const std::vector<int>& pi) const;

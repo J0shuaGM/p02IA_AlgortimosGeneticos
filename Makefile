@@ -13,10 +13,10 @@
 TARGET = genetico
 
 # Lista de archivos fuente(.cc)
-SOURCES = cliente.cc entornopfsp.cc tools.cc
+SOURCES = cliente.cc entornopfsp.cc tools.cc heuristica.cc
 
 # Dependencias de los archivos fuente 
-DEPENDENCIES = tools.h individuo.h entornopfsp.h algoritmogenetico.h
+DEPENDENCIES = tools.h individuo.h entornopfsp.h algoritmogenetico.h heuristica.h
 
 # Opciones de compilación
 CXX = g++
