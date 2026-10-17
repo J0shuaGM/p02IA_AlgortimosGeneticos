@@ -143,3 +143,50 @@ void AlgoritmoGenetico::mutar(Individuo& ind) {
     std::exit(EXIT_FAILURE);
   }
 }
+
+void AlgoritmoGenetico::reemplazo(const std::vector<Individuo>& hijos) {
+  std::vector<Individuo> copia = hijos;
+  auto pos_mejor_anterior = std::min_element(poblacion_.begin(), poblacion_.end());
+  auto pos_peor_hijo = std::max_element(copia.begin(), copia.end());
+  Individuo mejor_anterior = poblacion_[pos_mejor_anterior - poblacion_.begin()];
+  if(mejor_anterior.makespan < copia[pos_peor_hijo - copia.begin()].makespan) {
+    copia[pos_peor_hijo - copia.begin()] = mejor_anterior;
+  }
+  poblacion_ = copia;
+}
+
+void AlgoritmoGenetico::ejecutar() {
+  inicializarPoblacion();
+  while(evaluaciones_actuales_ < parametros_.max_evaluaciones_) {
+    std::vector<Individuo> hijos; 
+    while(static_cast<int>(hijos.size()) < parametros_.tam_poblacion_ && evaluaciones_actuales_ < parametros_.max_evaluaciones_) {
+
+      Individuo permutacion1 = seleccionTorneo(); 
+      Individuo permutacion2 = seleccionTorneo();
+      Individuo hijo1, hijo2;
+      std::pair<Individuo, Individuo> cruce;
+
+      std::uniform_real_distribution<double> azar(0.0, 1.0); 
+
+      if(azar(rng_) < parametros_.prob_cruce_) {
+        cruce = cruceOX(permutacion1, permutacion2);
+        hijo1 = cruce.first;
+        hijo2 = cruce.second;
+      } else {
+        hijo1 = permutacion1; 
+        hijo2 = permutacion2;
+      }
+
+      if(azar(rng_) < parametros_.prob_mutacion_) mutar(hijo1);
+      if(azar(rng_) < parametros_.prob_mutacion_) mutar(hijo2);
+
+      evaluar(hijo1);
+      hijos.push_back(hijo1);
+      if(static_cast<int>(hijos.size()) < parametros_.tam_poblacion_ && evaluaciones_actuales_ < parametros_.max_evaluaciones_) {
+        evaluar(hijo2); 
+        hijos.push_back(hijo2);
+      }
+    }
+    if(static_cast<int>(hijos.size())== parametros_.tam_poblacion_) reemplazo(hijos);
+  }
+}

@@ -21,7 +21,7 @@ struct Individuo {
 
   //Constructor
   Individuo() : makespan(-1) {}
-  Individuo(int n) : permutacion(n), makespan(-1) {}
+  explicit Individuo(int n) : permutacion(n), makespan(-1) {} //explicit: impide convertir un int en Individuo sin querer
 
   //Sobrecarga del operador <
   bool operator<(const Individuo& otro) const {
