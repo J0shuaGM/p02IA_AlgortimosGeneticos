@@ -13,6 +13,7 @@
 #include <numeric>
 #include <algorithm>
 #include <limits>
+#include <cassert>
 
 AlgoritmoGenetico::AlgoritmoGenetico(const PFSP& instancia, const Parametros& parametros) 
   : instancia_(instancia), parametros_(parametros), evaluaciones_actuales_(0), rng_(parametros.semilla_) {
@@ -60,4 +61,52 @@ Individuo AlgoritmoGenetico::seleccionTorneo() {
     }
   }
   return mejor; 
+}
+
+Individuo AlgoritmoGenetico::generarHijoOX(const Individuo& padreA, const Individuo& padreB, int a, int b) const {
+  int tamPadreA = padreA.permutacion.size(); 
+  Individuo hijo(tamPadreA); 
+  std::vector<bool> usado(tamPadreA, false); 
+
+  //Copiar el segmento del padre A
+  for(int i = a; i <= b; ++i) {
+    hijo.permutacion[i] = padreA.permutacion[i];
+    usado[padreA.permutacion[i]] = true;
+  }
+
+  //Rellenar huecos con padreB
+  int pos{0}; 
+  for(auto trabajo : padreB.permutacion) {
+    if(!usado[trabajo]) {
+      if(pos == a) pos = b + 1;
+      hijo.permutacion[pos] = trabajo;
+      pos = pos + 1;
+    }
+  }
+  return hijo;
+}
+
+std::pair<Individuo, Individuo> AlgoritmoGenetico::cruceOX(const Individuo& padre1, const Individuo& padre2) {
+  std::uniform_int_distribution<int> distribucion(0, static_cast<int>(padre1.permutacion.size()) - 1); //Rango cerrado [0, n-1]
+  int indiceAleatorioA = distribucion(rng_);
+  int indiceAleatorioB = distribucion(rng_);
+  if(indiceAleatorioA > indiceAleatorioB) std::swap(indiceAleatorioA, indiceAleatorioB); //Garantizar a <= b
+  Individuo hijoA = generarHijoOX(padre1, padre2, indiceAleatorioA, indiceAleatorioB);
+  Individuo hijoB = generarHijoOX(padre2, padre1, indiceAleatorioA, indiceAleatorioB);
+
+  assert(esPermutacionValida(hijoA.permutacion));
+  assert(esPermutacionValida(hijoB.permutacion));
+  
+  return {hijoA, hijoB};
+}
+
+bool AlgoritmoGenetico::esPermutacionValida(const std::vector<int>& pi) const {
+  if(static_cast<int>(pi.size()) != instancia_.getTrabajos()) return false;
+  std::vector<bool> visto(instancia_.getTrabajos(), false);
+  for(auto trabajo : pi){
+    if(trabajo < 0 || trabajo >= instancia_.getTrabajos()) return false;
+    if(visto[trabajo]) return false;
+    visto[trabajo] = true;
+  }
+  return true;
 }
