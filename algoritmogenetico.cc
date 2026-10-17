@@ -96,7 +96,7 @@ std::pair<Individuo, Individuo> AlgoritmoGenetico::cruceOX(const Individuo& padr
 
   assert(esPermutacionValida(hijoA.permutacion));
   assert(esPermutacionValida(hijoB.permutacion));
-  
+
   return {hijoA, hijoB};
 }
 
@@ -109,4 +109,37 @@ bool AlgoritmoGenetico::esPermutacionValida(const std::vector<int>& pi) const {
     visto[trabajo] = true;
   }
   return true;
+}
+
+void AlgoritmoGenetico::mutacionInsercion(Individuo& ind) {
+  std::uniform_int_distribution<int> distribucion(0, static_cast<int>(ind.permutacion.size()) - 1);
+  int posAleatoriaI = distribucion(rng_);
+  int posAleatoriaJ;
+  do { //Se sortea al menos una vez y se repite mientras coincida con I
+    posAleatoriaJ = distribucion(rng_);
+  } while(posAleatoriaJ == posAleatoriaI);
+  int trabajo = ind.permutacion[posAleatoriaI]; 
+  ind.permutacion.erase(ind.permutacion.begin() + posAleatoriaI);
+  ind.permutacion.insert(ind.permutacion.begin() + posAleatoriaJ, trabajo);
+  assert(esPermutacionValida(ind.permutacion));
+}
+
+void AlgoritmoGenetico::mutacionIntercambio(Individuo& ind) {
+  std::uniform_int_distribution<int> distribucion(0, static_cast<int>(ind.permutacion.size()) - 1);
+  int posAleatoriaI = distribucion(rng_);
+  int posAleatoriaJ;
+  do { //Se sortea al menos una vez y se repite mientras coincida con I
+    posAleatoriaJ = distribucion(rng_);
+  } while(posAleatoriaJ == posAleatoriaI);
+  std::swap(ind.permutacion[posAleatoriaI], ind.permutacion[posAleatoriaJ]);
+  assert(esPermutacionValida(ind.permutacion));
+}
+
+void AlgoritmoGenetico::mutar(Individuo& ind) {
+  if(parametros_.tipo_mutacion_ == "insercion" || parametros_.tipo_mutacion_ == "INSERCION") mutacionInsercion(ind);
+  else if(parametros_.tipo_mutacion_ == "intercambio" || parametros_.tipo_mutacion_ == "INTERCAMBIO") mutacionIntercambio(ind);
+  else {
+    std::cerr << "Tipo de mutacion desconocido: " << parametros_.tipo_mutacion_ << std::endl;
+    std::exit(EXIT_FAILURE);
+  }
 }

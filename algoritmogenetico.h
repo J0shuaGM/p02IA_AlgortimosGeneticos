@@ -57,6 +57,7 @@ class AlgoritmoGenetico {
     //Mutaciones
     void mutacionInsercion(Individuo& ind); 
     void mutacionIntercambio(Individuo& ind);
+    void mutar(Individuo& ind);
 
     //Comprobacion de factibiliad
     bool esPermutacionValida(const std::vector<int>& pi) const;
