@@ -43,6 +43,12 @@ int main(int argc, char* argv[]) {
   Parametros param;
   AlgoritmoGenetico prueba(instancia, param);
   prueba.inicializarPoblacion();
+  int contador{0};
+  for(int i = 0; i < 10000; ++i) {
+    Individuo torneo = prueba.seleccionTorneo();
+    if(torneo.makespan == 1680) ++contador;
+  }
+  std::cout << contador << std::endl;
   std::vector<Individuo> poblacion = prueba.getPoblacion(); 
   for(Individuo indi : poblacion) {
     std::cout << indi.makespan << " ";

@@ -51,6 +51,7 @@ class AlgoritmoGenetico {
     Individuo seleccionTorneo(void); //Torneo de tamaño K
 
     //Cruce OX
+    Individuo generarHijoOX(Individuo PadreA, Individuo PadreB, int a, int b); //Funcion auxiliar que recible los cortes por parametros para poder realizar pruebas
     std::pair<Individuo, Individuo> cruceOX(const Individuo& p1, const Individuo& p2);
 
     //Mutaciones

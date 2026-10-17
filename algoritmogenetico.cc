@@ -45,3 +45,19 @@ void AlgoritmoGenetico::inicializarPoblacion(void) {
     poblacion_.push_back(aleatorio);
   }
 }
+
+Individuo AlgoritmoGenetico::seleccionTorneo() {
+  std::uniform_int_distribution<int> distribucion(0, parametros_.tam_poblacion_ - 1); 
+  int indiceAleatorio = distribucion(rng_); 
+  Individuo mejor = poblacion_[indiceAleatorio];
+  
+  //El primer participante ya esta elegido: faltan K-1
+  for(int i = 1; i < parametros_.tam_torneo_; ++i) {
+    int candidatoAleatorio = distribucion(rng_);
+    const Individuo& candidato = poblacion_[candidatoAleatorio]; //Referencia: solo se compara, no se copia
+    if(candidato.makespan < mejor.makespan) {
+      mejor = candidato; 
+    }
+  }
+  return mejor; 
+}
