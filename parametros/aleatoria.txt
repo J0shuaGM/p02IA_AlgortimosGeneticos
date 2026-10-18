@@ -1,0 +1,6 @@
+# Busqueda aleatoria (referencia T2): mismo presupuesto y semillas que el AG
+algoritmo   aleatoria
+E           50000
+semilla     1
+ejecuciones 10
+brutos      resultados/brutos_aleatoria.csv
