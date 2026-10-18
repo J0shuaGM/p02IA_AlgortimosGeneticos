@@ -14,7 +14,11 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <fstream>
+
+#include "algoritmogenetico.h"
 
 void Usage(int argc, char *argv[]);
+Parametros LeerParametros(const std::string& nombre_fichero);
 
 #endif

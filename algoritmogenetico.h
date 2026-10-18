@@ -22,13 +22,16 @@ struct Parametros {
     tam_poblacion_(N), prob_cruce_(pc), prob_mutacion_(pm), tam_torneo_(K), max_evaluaciones_(max_evaluaciones), semilla_(semilla), tipo_mutacion_(tipo_mutacion) {}
 
   //Paramatros configurables
-  int tam_poblacion_{50}; //N
+  int tam_poblacion_{100}; //N
   double prob_cruce_{0.9}; //p_c
   double prob_mutacion_{0.2}; //p_m
   int tam_torneo_{2}; //Tamaño del torneo K (2 = torneo binario)
   int max_evaluaciones_{50000}; //E (Presupuesto)
   int semilla_{1}; 
   std::string tipo_mutacion_{"insercion"}; //Insercion o intercambio
+  std::string algoritmo_{"ga"}; //ga, neh o aleatoria
+  int ejecuciones_{1}; //Numero de ejecuciones (semillas semilla_, semilla_+1, ...)
+  std::string fichero_brutos_{""}; //CSV donde se anade una fila por ejecucion ("" = no se guardan)
 };
 
 
