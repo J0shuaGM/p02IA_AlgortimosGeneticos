@@ -12,6 +12,8 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <sstream>
+#include <cctype>
 
 PFSP::PFSP(const std::string& nombre_fichero) {
   std::ifstream fichero(nombre_fichero);
@@ -21,10 +23,21 @@ PFSP::PFSP(const std::string& nombre_fichero) {
   }
 
   std::string linea;
-  std::getline(fichero, linea); //Saltar la linea de texto "number of jobs, ..."
-  fichero >> numero_trabajos_ >> numero_maquinas_ >> semilla_inicial >> upper_bound_ >> lower_bound_;
-  std::getline(fichero, linea); //Consumir el salto de linea que queda tras los numeros
-  std::getline(fichero, linea); //Saltar la linea de texto "processing times :"
+  std::getline(fichero, linea);
+  size_t primer_caracter = linea.find_first_not_of(" \t");
+  if(primer_caracter != std::string::npos && std::isdigit(static_cast<unsigned char>(linea[primer_caracter]))) {
+    //Formato simple: la primera linea es "n m" y despues viene la matriz (sin semilla ni cotas)
+    std::istringstream cabecera(linea);
+    cabecera >> numero_trabajos_ >> numero_maquinas_;
+    semilla_inicial = 0;
+    upper_bound_ = -1; //-1 = cota desconocida
+    lower_bound_ = -1;
+  } else {
+    //Formato Taillard: la primera linea es texto ("number of jobs, ...")
+    fichero >> numero_trabajos_ >> numero_maquinas_ >> semilla_inicial >> upper_bound_ >> lower_bound_;
+    std::getline(fichero, linea); //Consumir el salto de linea que queda tras los numeros
+    std::getline(fichero, linea); //Saltar la linea de texto "processing times :"
+  }
 
   //Matriz m x n: tiempo_proceso_[maquina][trabajo]
   tiempo_proceso_.assign(numero_maquinas_, std::vector<int>(numero_trabajos_));

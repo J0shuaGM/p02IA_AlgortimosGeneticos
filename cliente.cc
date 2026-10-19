@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
   std::string nombre_fichero = argv[1];
   nombre_fichero = nombre_fichero.substr(nombre_fichero.find_last_of('/') + 1);
   nombre_fichero = nombre_fichero.substr(0, nombre_fichero.find('.'));
+  
   int UB = instancia.getUpperBound(); 
   int cmax_neh = instancia.Makespan(NEH(instancia)); 
 
@@ -63,7 +64,10 @@ int main(int argc, char* argv[]) {
     cmaxs.push_back(cmax); 
     tiempo_total += tiempo;
     if(brutos.is_open()) { //CSV: instancia,semilla,cmax,rpd_ub,cpu_time_s
-      brutos << nombre_fichero << "," << param_r.semilla_ << "," << cmax << "," << 100.0 * (cmax - UB) / UB << "," << tiempo << std::endl;
+      brutos << nombre_fichero << "," << param_r.semilla_ << "," << cmax << ",";
+      if(instancia.tieneUpperBound()) brutos << 100.0 * (cmax - UB) / UB;
+      else brutos << "NULL"; //Instancia sin UB: el RPD no se puede calcular
+      brutos << "," << tiempo << std::endl;
     }
   }
   //Calculo del mejor cmax
@@ -85,11 +89,12 @@ int main(int argc, char* argv[]) {
   }
 
   //Fila de la tabla (CSV): instancia,n,m,best_cmax,avg_cmax,std_cmax,cmax_neh,rpd_ub,rpd_neh,cpu_time_s
-  double rpd_ub = 100.0 * (best_cmax - UB) / UB;
   double rpd_neh = 100.0 * (best_cmax - cmax_neh) / cmax_neh; //Negativo = mejora a NEH
   std::cout << std::fixed << std::setprecision(2);
   std::cout << nombre_fichero << "," << instancia.getTrabajos() << "," << instancia.getMaquinas() << ","
-            << best_cmax << "," << media << "," << desviacion_tipica << "," << cmax_neh << ","
-            << rpd_ub << "," << rpd_neh << "," << tiempo_total / param.ejecuciones_ << std::endl;
+            << best_cmax << "," << media << "," << desviacion_tipica << "," << cmax_neh << ",";
+  if(instancia.tieneUpperBound()) std::cout << 100.0 * (best_cmax - UB) / UB;
+  else std::cout << "NULL"; //Instancia sin UB: el RPD no se puede calcular
+  std::cout << "," << rpd_neh << "," << tiempo_total / param.ejecuciones_ << std::endl;
   return EXIT_SUCCESS;
 }

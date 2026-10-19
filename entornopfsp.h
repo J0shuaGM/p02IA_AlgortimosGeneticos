@@ -26,6 +26,7 @@ class PFSP {
     int getMaquinas(void) const { return numero_maquinas_; }
     int getTiempo(int trabajo, int maquina) const { return tiempo_proceso_[maquina][trabajo]; }
     int getUpperBound(void) const { return upper_bound_; }
+    bool tieneUpperBound(void) const { return upper_bound_ > 0; } //False en el formato simple (sin cotas)
     int getSemilla(void) const { return semilla_inicial; }
 
     //Metodos

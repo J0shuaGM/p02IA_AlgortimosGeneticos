@@ -26,12 +26,7 @@ CXXFLAGS = -std=c++17 -Wall -O2
 $(TARGET): $(SOURCES) $(DEPENDENCIES)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES)
 
-# Regla para compilar el programa de pruebas del AG (con AddressSanitizer para detectar accesos fuera de rango)
-PRUEBA_SOURCES = prueba_ag.cc entornopfsp.cc heuristica.cc algoritmogenetico.cc
-prueba: $(PRUEBA_SOURCES) $(DEPENDENCIES)
-	$(CXX) $(CXXFLAGS) -g -fsanitize=address -o prueba_ag $(PRUEBA_SOURCES)
-
 # Regla para limpiar los archivos generados
-.PHONY: clean prueba
+.PHONY: clean 
 clean:
-	rm -f $(TARGET) prueba_ag *.o
+	rm -f $(TARGET) *.o
