@@ -1,0 +1,11 @@
+# Configuracion base del AG
+algoritmo   ga          # ga | neh | aleatoria
+N           100
+pc          0.9
+pm          0.2
+K           6
+E           50000
+mutacion    insercion   # insercion | intercambio
+semilla     1           # semilla de la primera ejecucion
+ejecuciones 10          # se usan semillas: semilla, semilla+1, ..., semilla+9
+brutos      resultados/brutos_pam2.csv   # una fila por ejecucion

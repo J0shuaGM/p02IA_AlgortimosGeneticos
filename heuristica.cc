@@ -14,6 +14,13 @@
 #include <algorithm>
 #include <limits>
 
+
+
+/**
+ * @brief Calculo de la heuristica NEH
+ * @param instancia entorno sobre el que se va a calcular
+ * @return vector con la mejor permutacion
+*/
 std::vector<int> NEH(const PFSP& instancia) {
   int numero_trabajos = instancia.getTrabajos();
   int numero_maquinas = instancia.getMaquinas();
@@ -62,6 +69,14 @@ std::vector<int> NEH(const PFSP& instancia) {
 }
 
 
+
+/**
+ * @brief Calculo de la busqueda aleatoria
+ * @param instancia entorno sobre el que se va a realizar la busqueda
+ * @param max_evaluaciones presupuesto de evaluaciones del algoritmo
+ * @param rng semilla para la aleatoriedad
+ * @return Vector con la mejor permutacion encontrada
+*/
 std::vector<int> BusquedaAleatoria(const PFSP& instancia, int max_evaluaciones, std::mt19937& rng) {
   int numero_trabajos = instancia.getTrabajos(); 
   std::vector<int> permutacion(numero_trabajos); 

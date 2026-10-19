@@ -48,6 +48,13 @@ PFSP::PFSP(const std::string& nombre_fichero) {
   }
 }
 
+
+
+/**
+ * @brief Metodo para calcular el makespan de una permutacion
+ * @param pi permutacion sobre la que realizar el calculo
+ * @return entero con el valor del makespan
+*/
 int PFSP::Makespan(const std::vector<int>& pi) const {
   //C[i] = instante en que la maquina i termina el ultimo trabajo procesado hasta ahora
   std::vector<int> C(numero_maquinas_, 0);
