@@ -100,6 +100,23 @@ El script recorre las instancias de `instancias/` (las `.fsp`) ordenadas por tam
 make
 ./experimentos.sh parametros/pam1.txt        # → resultados/tabla_pam1.csv y brutos_pam1.csv
 ./experimentos.sh parametros/aleatoria.txt   # → resultados/tabla_aleatoria.csv y brutos_aleatoria.csv
+./experimentos.sh parametros/pam2.txt        # → resultados/tabla_pam2.csv y brutos_pam2.csv (K = 6)
 ```
 
 Con la misma semilla se obtiene siempre exactamente el mismo resultado.
+
+---
+
+## 5. Comparación del tamaño del torneo: K = 2 frente a K = 6
+
+`pam1.txt` (K = 2) y `pam2.txt` (K = 6) solo se diferencian en K. Los demás parámetros son N = 100, pc = 0.9, pm = 0.2, mutación por inserción, E = 50000 y 10 semillas, sobre las 120 instancias.
+
+| | K = 2 | K = 6 |
+|---|---|---|
+| RPD medio del mejor (`rpd_ub`) | **1.37 %** | 1.45 % |
+| RPD medio de la media de las 10 ejecuciones | **1.80 %** | 1.87 % |
+| Instancias en las que obtiene mejor `best_cmax` | **58** | 31 (31 empates) |
+| Instancias con las 10 semillas en el mismo resultado (std = 0) | 5 | 10 |
+| Tiempo medio por ejecución | 0.32 s | 0.33 s |
+
+**Conclusión:** K = 2 obtiene mejores resultados. Con N = 100, la probabilidad de que el mejor individuo gane un torneo es 1 − (1 − 1/N)<sup>K</sup>, que pasa de ≈ 2 % con K = 2 a ≈ 5.9 % con K = 6. Ese aumento de la presión selectiva hace que la población pierda diversidad antes (más explotación y menos exploración) y favorece la convergencia prematura: con K = 6 se duplican las instancias en las que todas las semillas acaban en el mismo makespan, y la desventaja es mayor en las instancias pequeñas. El tiempo no cambia, porque el torneo solo compara valores ya calculados. Las diferencias son pequeñas (≈ 0.08 puntos de RPD) y en algunos grupos K = 6 empata o gana, pero la tendencia global favorece al torneo binario (K = 2), que es el que se usa en la configuración final.
